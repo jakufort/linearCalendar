@@ -1,16 +1,14 @@
 package pl.jakufort.linearCalendar
 
-import java.io.File
-import java.time.LocalDate
+import java.io.{File, FileOutputStream}
 
-import pl.jakufort.linearCalendar.exporter.PDFExporter
-import pl.jakufort.linearCalendar.generator.LinearCalendar
-import pl.jakufort.linearCalendar.properties.{CalendarProperties, ExporterProperties}
+import pl.jakufort.linearCalendar.calendar.{CalendarProperties, LinearCalendar}
+import pl.jakufort.linearCalendar.formats.pdf.PDFCalendarExporter
 
 object Main {
 
   def main(args: Array[String]): Unit = {
-    val calendar = LinearCalendar.generate(new CalendarProperties(year = 2018, specialDates = Set.apply(LocalDate.now())))
-    PDFExporter.export(calendar = calendar, config = new ExporterProperties(pages = 1, new File("calendar.pdf")))
+    val calendar = LinearCalendar.generate(new CalendarProperties(year = 2018))
+    PDFCalendarExporter.export(calendar, new FileOutputStream(new File("calendar.pdf")))
   }
 }
