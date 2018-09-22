@@ -21,5 +21,12 @@ class CalendarRowTest extends FunSpec {
       assert(subject.days.head.dayInMonth.isDefined)
       assert(subject.days.drop(month.length(false)).forall(_.dayInMonth.isEmpty))
     }
+
+    it("generates correct present days") {
+      for (month <- Month.values().map(YearMonth.of(year, _))) {
+        val row = generate(month)
+        assert(row.days.filter(_.dayInMonth.isDefined).map(_.dayInMonth.get) == (1 to month.lengthOfMonth))
+      }
+    }
   }
 }

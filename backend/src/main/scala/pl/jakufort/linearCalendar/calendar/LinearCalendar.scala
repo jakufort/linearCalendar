@@ -5,8 +5,8 @@ import java.time.YearMonth
 object LinearCalendar {
   def generate(calendarProperties: CalendarProperties): LinearCalendar = {
     val months = (1 to 12)
-      .map(i => YearMonth.of(calendarProperties.year, i))
-      .map(yearMonth => CalendarRow.generate(yearMonth))
+      .map(YearMonth.of(calendarProperties.year, _))
+      .map(CalendarRow.generate)
     new LinearCalendar(months)
   }
 }
