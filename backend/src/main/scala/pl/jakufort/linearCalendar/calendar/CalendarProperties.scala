@@ -1,3 +1,3 @@
 package pl.jakufort.linearCalendar.calendar
 
-class CalendarProperties(val year: Int) {}
+final case class CalendarProperties(year: Int) {}

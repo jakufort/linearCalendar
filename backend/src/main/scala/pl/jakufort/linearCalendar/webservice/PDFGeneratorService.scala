@@ -1,21 +1,22 @@
-package pl.jakufort.linearCalendar
+package pl.jakufort.linearCalendar.webservice
 
-import java.io.{File, FileOutputStream}
 import java.time.format.TextStyle
 import java.util.Locale
 
+import akka.util.ByteString
 import com.itextpdf.kernel.geom.PageSize
 import pl.jakufort.linearCalendar.calendar.{CalendarProperties, LinearCalendar}
 import pl.jakufort.linearCalendar.export.converter.pdf.PDFConverterProperties
 import pl.jakufort.linearCalendar.export.pdf.{PDFCalendarExporter, PDFExporterProperties}
 
-object Main {
+object PDFGeneratorService {
 
-  def main(args: Array[String]): Unit = {
+  def generate(): ByteString = {
+    val builder = ByteString.createBuilder
     val calendar = LinearCalendar.generate(CalendarProperties(year = 2018))
     PDFCalendarExporter.export(
       calendar = calendar,
-      outputStream = new FileOutputStream(new File("calendar.pdf")),
+      outputStream = builder.asOutputStream,
       properties =
         PDFExporterProperties(
           pageSize = PageSize.A4,
@@ -27,5 +28,7 @@ object Main {
           )
         )
     )
+    builder.result()
   }
+
 }

@@ -5,8 +5,8 @@ import java.util.Locale
 
 import pl.jakufort.linearCalendar.export.converter.ConverterProperties
 
-class PDFConverterProperties(val cellHeight: Float,
-                             val locale: Locale,
-                             val daysStyle: TextStyle,
-                             val monthsStyle: TextStyle)
+final case class PDFConverterProperties(cellHeight: Float,
+                                        locale: Locale,
+                                        daysStyle: TextStyle,
+                                        monthsStyle: TextStyle)
   extends ConverterProperties {}

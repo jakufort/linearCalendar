@@ -13,8 +13,8 @@ class PDFCalendarConverterTest extends FunSpec {
     import pl.jakufort.linearCalendar.export.converter.pdf.PDFCalendarConverter.convert
 
     val subject = convert(
-      calendar = LinearCalendar.generate(new CalendarProperties(2018)),
-      properties = new PDFConverterProperties(
+      calendar = LinearCalendar.generate(CalendarProperties(2018)),
+      properties = PDFConverterProperties(
         cellHeight = 50,
         locale = Locale.UK,
         daysStyle = TextStyle.SHORT,

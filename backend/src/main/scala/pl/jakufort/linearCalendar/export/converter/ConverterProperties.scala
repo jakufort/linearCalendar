@@ -1,5 +1,3 @@
 package pl.jakufort.linearCalendar.export.converter
 
-class ConverterProperties {
-
-}
+trait ConverterProperties {}
