@@ -19,11 +19,9 @@ object PDFCalendarConverter extends CalendarConverter[Table, PDFConverterPropert
   private def addDaysHeader(table: Table, properties: PDFConverterProperties): Unit = {
     new Cell(1, 2).add(new Paragraph(""))
     addEmptyCell(table)
-    for (_ <- 1 to CalendarRow.NUMBER_OF_WEEKS) {
-      for (day <- DayOfWeek.values()) {
-        table.addCell(day.getDisplayName(properties.daysStyle, properties.locale))
-      }
-    }
+    (0 until CalendarRow.NUMBER_OF_DAYS)
+      .map(i => DayOfWeek.of((i % 7) + 1))
+      .foreach(day => table.addCell(day.getDisplayName(properties.daysStyle, properties.locale)))
   }
 
   private def addMonthRow(table: Table, properties: PDFConverterProperties, row: CalendarRow): Unit = {

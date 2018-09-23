@@ -3,7 +3,7 @@ package pl.jakufort.linearCalendar.calendar
 import java.time.{DayOfWeek, YearMonth}
 
 object CalendarRow {
-  val NUMBER_OF_WEEKS: Int = 6
+  private val NUMBER_OF_WEEKS: Int = 6
   val NUMBER_OF_DAYS: Int = NUMBER_OF_WEEKS * 7
 
   def generate(month: YearMonth): CalendarRow = {
