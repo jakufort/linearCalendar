@@ -2,6 +2,7 @@ package pl.jakufort.linearCalendar.export.pdf
 
 import java.io.OutputStream
 
+import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf._
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Table
@@ -26,9 +27,16 @@ object PDFCalendarExporter extends CalendarExporter[PDFConverterProperties, PDFE
 
 
   private def createDocument(calendarTable: Table, pdfDocument: PdfDocument, properties: PDFExporterProperties):Document = {
-    val document = new Document(pdfDocument, properties.pageSize.rotate())
+    val document = new Document(pdfDocument, getPageSize(properties.pageSize).rotate())
     document.add(calendarTable)
     document
+  }
+
+  private def getPageSize(pageSize: String): PageSize = pageSize match {
+    case "A0" => PageSize.A0
+    case "A1" => PageSize.A1
+    case "A2" => PageSize.A2
+    case _ => PageSize.A4
   }
 
 
