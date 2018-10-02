@@ -1,4 +1,4 @@
-module Exporters.HtmlExporter exposing (..)
+module Exporters.HtmlExporter exposing (exportCalendar)
 
 import Exporters.Properties exposing (ExportProperties)
 import Generator.Calendar exposing (LinearCalendar, numberOfWeeks, CalendarMonth)
