@@ -1,4 +1,4 @@
-module Generator.Calendar exposing (generate, LinearCalendar)
+module Generator.Calendar exposing (generate, LinearCalendar, numberOfWeeks, CalendarMonth)
 
 import List exposing (map)
 import Generator.Properties exposing (CalendarProperties)
@@ -36,8 +36,7 @@ generateDays month =
     emptyStartDaysLimit = monthFirstDay - monday
     emptyEndDaysLimit = emptyStartDaysLimit + daysInMonth (Date.year month) (Date.month month)
   in
-    List.repeat numberOfWeeks [1, 2, 3, 4, 5, 6, 7]
-    |> map (getDay emptyStartDaysLimit emptyEndDaysLimit)
+    map (getDay emptyStartDaysLimit emptyEndDaysLimit) (List.range 1 (numberOfWeeks * 7))
 
 getDay : Int -> Int -> Int -> Maybe Int
 getDay startLimit endLimit day =
