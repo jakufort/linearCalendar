@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Main</title>
+</head>
+
+<body>
+<div id="elm"></div>
+<script src="js/elm.js"></script>
+<script src="js/pdfExporter.js"></script>
+<script>
+var app = Elm.Main.init({ node: document.getElementById("elm") });
+if (document.getElementById("elm")) {
+  document.getElementById("elm").innerText = 'This is a headless program, meaning there is nothing to show here.\n\nI started the program anyway though, and you can access it as `app` in the developer console.';
+} else {
+  pdfExporter.subscribeToElm(app);
+}
+</script>
+</body>
+</html>

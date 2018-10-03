@@ -1,13 +1,15 @@
-module Exporters.Properties exposing (ExportProperties(..))
+module Exporters.Properties exposing (PDFExportProperties, HTMLExportProperties)
 
 import Generator.Properties exposing (CalendarProperties)
 
-type ExportProperties =
-  PDFExportProperties {
+type alias PDFExportProperties = {
     cellHeight: Int,
     pageSize: PageSize
   }
-  | HTMLExportProperties
 
 type alias PageSize = String
+
+type alias HTMLExportProperties = {}
+
+
 

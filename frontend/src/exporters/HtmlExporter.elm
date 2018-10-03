@@ -1,10 +1,10 @@
 module Exporters.HtmlExporter exposing (exportCalendar)
 
-import Exporters.Properties exposing (ExportProperties)
+import Exporters.Properties exposing (HTMLExportProperties)
 import Generator.Calendar exposing (LinearCalendar, numberOfWeeks, CalendarMonth)
 import Html exposing (Html, table, tr, td, text)
 
-exportCalendar : ExportProperties -> LinearCalendar -> Html msg
+exportCalendar : HTMLExportProperties -> LinearCalendar -> Html msg
 exportCalendar _ calendar = table [] ([
     daysHeader
   ] ++ List.map (monthRow) calendar.months)
