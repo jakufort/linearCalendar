@@ -24,7 +24,7 @@ generateHeader: List String
 generateHeader = [""] ++ (List.foldr (++) [] (List.repeat numberOfWeeks daysInWeek))
 
 daysInWeek : List String
-daysInWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+daysInWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 generateMonths : Int -> List CalendarMonth
 generateMonths year =
