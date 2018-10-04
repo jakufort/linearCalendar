@@ -21,7 +21,10 @@ encodeProperties properties = E.object [
   ]
 
 encodeCalendar : LinearCalendar -> E.Value
-encodeCalendar calendar = E.list encodeMonth (calendar.months)
+encodeCalendar calendar = E.object [
+    ("months", E.list encodeMonth (calendar.months)),
+    ("header", E.list (E.string) (calendar.header))
+  ]
 
 encodeMonth : CalendarMonth -> E.Value
 encodeMonth month = E.object [

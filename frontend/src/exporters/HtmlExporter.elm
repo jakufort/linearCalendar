@@ -6,14 +6,11 @@ import Html exposing (Html, table, tr, td, text)
 
 exportCalendar : HTMLExportProperties -> LinearCalendar -> Html msg
 exportCalendar _ calendar = table [] ([
-    daysHeader
+    (daysHeader calendar)
   ] ++ List.map (monthRow) calendar.months)
 
-daysHeader : Html msg
-daysHeader = tr [] ([td [] []] ++ (List.map (\x -> td [] [text x]) (List.foldr (++) [] (List.repeat numberOfWeeks daysInWeek))))
-
-daysInWeek : List String
-daysInWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+daysHeader : LinearCalendar -> Html msg
+daysHeader calendar = tr [] (List.map (\x -> td [] [text x]) (calendar.header))
 
 monthRow : CalendarMonth -> Html msg
 monthRow month = tr [] ([td [] [text month.displayName]] ++ (List.map (dayCell) month.days))

@@ -8,6 +8,7 @@ import Basics
 import Dict
 
 type alias LinearCalendar = {
+    header: List String,
     months: List CalendarMonth
   }
 
@@ -17,7 +18,13 @@ type alias CalendarMonth = {
   }
 
 generate : CalendarProperties -> LinearCalendar
-generate properties = LinearCalendar (generateMonths properties.year)
+generate properties = LinearCalendar generateHeader (generateMonths properties.year)
+
+generateHeader: List String
+generateHeader = [""] ++ (List.foldr (++) [] (List.repeat numberOfWeeks daysInWeek))
+
+daysInWeek : List String
+daysInWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 generateMonths : Int -> List CalendarMonth
 generateMonths year =
