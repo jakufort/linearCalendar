@@ -20,10 +20,11 @@ var pdfExporter = function() {
     ];
 
     pdfMake.createPdf(definition).download('calendar.pdf');
+//    pdfMake.createPdf(definition).open();
   }
 
   var tableDefinition = {
-    pageSize: 'A5',
+    pageSize: 'A4',
     pageOrientation: 'landscape'
   }
 
