@@ -1,4 +1,4 @@
-
+# Linear Calendar in elm
 
 ## Used libraries
 - pdfmake
@@ -10,4 +10,4 @@
 - `pdfExporter.js` - already inside repository 
 
 ## License
-- AGPL
+AGPL 3.0

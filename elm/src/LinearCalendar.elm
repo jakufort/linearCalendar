@@ -7,6 +7,10 @@ import Exporters.HtmlExporter
 import Exporters.Properties exposing (PDFExportProperties, HTMLExportProperties)
 import Generator.Calendar exposing (generate)
 import Exporters.PdfExporter
+import Bootstrap.Grid as Grid
+import Bootstrap.Tab as Tab
+import Bootstrap.CDN as CDN
+import Bootstrap.Utilities.Spacing as Spacing
 
 main = Browser.element
                    { init = init
@@ -17,7 +21,8 @@ main = Browser.element
 
 type alias Model = {
     year: String,
-    panel: Panel
+    panel: Panel,
+    tabState: Tab.State
   }
 
 type alias PDFPanel = {
@@ -34,7 +39,8 @@ type Panel = PDF PDFPanel | HTML HTMLPanel
 init : () -> (Model, Cmd Msg)
 init _ = ({
   year = "2018",
-  panel = HTML { shouldBeGenerated = False }
+  panel = HTML { shouldBeGenerated = False },
+  tabState = Tab.initialState
   }, Cmd.none)
 
 type Msg = ChangeYear String
@@ -43,6 +49,7 @@ type Msg = ChangeYear String
   | ChangePanel Panel
   | ChangePageSize String
   | ChangeCellHeight String
+  | ChangeTab Tab.State
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -53,6 +60,7 @@ update msg model =
         ChangePanel newPanel -> ({ model | panel = newPanel }, Cmd.none)
         ChangePageSize newPageSize -> ({ model | panel = setPageSize (model.panel) newPageSize }, Cmd.none)
         ChangeCellHeight newCellHeight -> ({ model | panel = setCellHeight (model.panel) newCellHeight }, Cmd.none)
+        ChangeTab state -> ({ model | tabState = state }, Cmd.none)
 
 setShouldGenerate : Panel -> Panel
 setShouldGenerate panel = case panel of
@@ -87,52 +95,81 @@ subscriptions model =
   Sub.none
 
 view : Model -> Html Msg
-view model =
-    div []
-    [
-      calendarPanel model
-      , exportTabs model
-    ]
-
-calendarPanel : Model -> Html Msg
-calendarPanel model = div [] [
-    label [ for "calendar-year" ] [ text "Year: "]
-    , input [ value model.year, onInput ChangeYear ] []
+view model = Grid.container []
+  [
+    -- TODO: remove
+    CDN.stylesheet,
+    Tab.config ChangeTab
+      |> Tab.items [
+          Tab.item {
+            id = "html-tab",
+            link = Tab.link [] [ text "Generate HTML" ],
+            pane = htmlPane model
+          }, Tab.item {
+            id = "pdf-tab",
+            link = Tab.link [] [ text "Generate PDF" ],
+            pane = pdfPane model
+          }
+        ]
+      |> Tab.view model.tabState
   ]
 
-exportTabs : Model -> Html Msg
-exportTabs model = div [] [
-    button [ onClick (ChangePanel (HTML { shouldBeGenerated = False })) ] [ text "HTML" ]
-    , button [ onClick (ChangePanel (PDF { pageSize = "A4", cellHeight = "10" })) ] [ text "PDF" ]
-    , case model.panel of
-        HTML fields -> htmlPanel model fields.shouldBeGenerated
-        PDF _ -> pdfPanel
+--view : Model -> Html Msg
+--view model =
+--    div []
+--    [
+--      calendarPanel model
+--      , exportTabs model
+--    ]
+
+htmlPane : Model -> Tab.Pane Msg
+htmlPane model = Tab.pane
+  [ Spacing.mt3 ]
+  [
+    h4 [] [ text "HTML PANE" ]
   ]
 
-htmlPanel : Model -> Bool -> Html Msg
-htmlPanel model shouldGenerate = div [ id "html-panel", class "tab-content" ] [
-    button [ onClick GenerateHtmlCalendar ] [ text "Generate HTML Calendar" ]
-    , case shouldGenerate of
-        True -> Exporters.HtmlExporter.exportCalendar HTMLExportProperties (generateCalendar model)
-        False -> div [] []
+pdfPane : Model -> Tab.Pane Msg
+pdfPane model = Tab.pane
+  [ Spacing.mt3 ]
+  [ pdfPanel ]
+
+pdfPanel : Html Msg
+pdfPanel = div [ id "pdf-panel", class "tab-content" ] [
+    div [] [
+        label [ for "page-size-select" ] [ text "Page Size: " ]
+        , select [ id "page-size-select", onInput ChangePageSize ] (List.map (\x -> option [ value x ] [ text x ]) ["A1", "A2", "A3", "A4", "A5"])
+      ]
+    , div [] [
+          label [ for "cell-height-input"] [ text "Cell Height: " ]
+          , input [ id "cell-height-input", onInput ChangeCellHeight ] []
+        ]
+    , button [ onClick GeneratePdfCalendar ] [ text "Generate PDF Calendar" ]
   ]
+
+
+--calendarPanel : Model -> Html Msg
+--calendarPanel model = div [] [
+--    label [ for "calendar-year" ] [ text "Year: "]
+--    , input [ value model.year, onInput ChangeYear ] []
+--  ]
+
+--exportTabs : Model -> Html Msg
+--exportTabs model = div [] [
+--    button [ onClick (ChangePanel (HTML { shouldBeGenerated = False })) ] [ text "HTML" ]
+--    , button [ onClick (ChangePanel (PDF { pageSize = "A4", cellHeight = "10" })) ] [ text "PDF" ]
+--    , case model.panel of
+--        HTML fields -> htmlPanel model fields.shouldBeGenerated
+--        PDF _ -> pdfPanel
+--  ]
+
+--htmlPanel : Model -> Bool -> Html Msg
+--htmlPanel model shouldGenerate = div [ id "html-panel", class "tab-content" ] [
+--    button [ onClick GenerateHtmlCalendar ] [ text "Generate HTML Calendar" ]
+--    , case shouldGenerate of
+--        True -> Exporters.HtmlExporter.exportCalendar HTMLExportProperties (generateCalendar model)
+--        False -> div [] []
+--  ]
 
 generateCalendar : Model -> Generator.Calendar.LinearCalendar
 generateCalendar model = generate (CalendarProperties (getOrDefault (model.year) 2018))
-
-pdfPanel : Html Msg
-pdfPanel = div [ id "pdf-panel", class "tab-content" ] ([pageSizeSelect] ++ [cellHeightInput] ++ [
-    button [ onClick GeneratePdfCalendar ] [ text "Generate PDF Calendar" ]
-  ])
-
-pageSizeSelect : Html Msg
-pageSizeSelect = div [] [
-    label [ for "page-size-select" ] [ text "Page Size: " ]
-    , select [ id "page-size-select", onInput ChangePageSize ] (List.map (\x -> option [ value x ] [ text x ]) ["A1", "A2", "A3", "A4", "A5"])
-  ]
-
-cellHeightInput : Html Msg
-cellHeightInput = div [] [
-    label [ for "cell-height-input"] [ text "Cell Height: " ]
-    , input [ id "cell-height-input", onInput ChangeCellHeight ] []
-  ]
