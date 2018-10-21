@@ -12,3 +12,6 @@ Currently, you can find implemenetations in:
 - scala
 - elm
 
+Demo(s) can be found [here](https://jakufort.github.io/linearCalendar/)
+
+(I'm using plural since I still want to mess around with more javascript technologies (both typescript and reason), so it's probable that more implementations will show up on github pages :) )
