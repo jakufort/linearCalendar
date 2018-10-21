@@ -104,7 +104,7 @@ navbar model = Navbar.config NavbarMsg
   |> Navbar.attrs [Spacing.mb4]
   |> Navbar.brand [ href "#"] [ text "Linear Calendar in Elm"]
   |> Navbar.items
-     [ Navbar.itemLink [href "#"] [ text "Source Code"] ]
+     [ Navbar.itemLink [href "https://github.com/jakufort/linearCalendar"] [ text "Source Code"] ]
   |> Navbar.view model.navbarState
 
 tabs : Model -> Html Msg
